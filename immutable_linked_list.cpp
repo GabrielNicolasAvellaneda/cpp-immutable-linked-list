@@ -25,6 +25,7 @@ class List {
 		}
 
 	private:
+
 	       static int size(List *list, int n) {
 			if (list->isEmpty()) {
 				return n;
@@ -47,7 +48,22 @@ class List {
 			return take(n - 1, list->tail(), result->insert(list->head()));  
 	       }
 
+	       static int indexOf(int n, List* list, int index) {
+		       if (list->isEmpty())
+			       return -1;
+
+		 	if (list->head() == n) {
+				return index;
+			}
+
+		       return indexOf(n, list->tail(), index + 1);
+	       }
+
 	public:
+
+	       static int indexOf(int n, List* list) {
+			return indexOf(n, list, 0);	
+	       }
 
 	       static int apply(int n, List* list) {
 			if (n < 0 || n >= length(list))
@@ -157,6 +173,10 @@ class List {
 			List::apply(n, this);
 		}
 
+		int indexOf(int n) {
+			List::indexOf(n, this);
+		}
+
 };
 
 void printList(List* list) {
@@ -169,7 +189,6 @@ void printList(List* list) {
 }
 
 int main() {
-
 	vector<int> numbers = {1, 2, 3, 4, 5};
 	List *list = List::create(numbers);
 	int head = list->head();
@@ -188,6 +207,9 @@ int main() {
 	
 	List* taken = list->take(2);
 	cout << "taken list size: " << taken->size() << endl;
+
+	int index = list->indexOf(6);
+	cout << "index: " << index << endl;
 
 	return 0;
 }
