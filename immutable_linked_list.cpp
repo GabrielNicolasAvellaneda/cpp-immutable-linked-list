@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstddef>
+#include <vector>
 
 #define NO_SUCH_ELEMENT_EXCEPTION 10;
 
@@ -17,9 +18,9 @@ class List {
 	};
 
 	public:
-		static List* create(int values[], int n) {
+		static List* create(vector<int> values) {
 			List* list = new List();
-			for (int i = n-1; i >= 0; i--) {
+			for (int i = values.size()-1; i >= 0; i--) {
 				int value = values[i];
 				list->insert(value);
 			}
@@ -29,7 +30,7 @@ class List {
 		List* insert(int value) {
 			Node *node = new Node;
 			node->value = value;
-			if (_head != NULL) {
+			if (!isEmpty()) {
 				node->_next = _head;
 			}	
 
@@ -43,7 +44,7 @@ class List {
 		}
 
 		int head() {
-			if (_head == NULL) {
+			if (isEmpty()) {
 				throw NO_SUCH_ELEMENT_EXCEPTION;
 			}
 
@@ -57,12 +58,16 @@ class List {
 			return list;
 		}
 
+		bool isEmpty() {
+			return _head == NULL;
+		}
+
 };
 
 int main() {
 
-	int numbers[] = {1, 2, 3, 4, 5};
-	List *list = List::create(numbers, 5);
+	vector<int> numbers = {1, 2, 3, 4, 5};
+	List *list = List::create(numbers);
 	int head = list->head();
 	List *tail = list->tail();
 	cout << "Head value: " << head << endl;
