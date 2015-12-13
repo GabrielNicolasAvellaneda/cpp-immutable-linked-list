@@ -3,8 +3,8 @@
 #include <vector>
 
 #define NO_SUCH_ELEMENT_EXCEPTION 10
-
 #define UNSUPPORTED_OPERATION_EXCEPTION 12
+#define INDEX_OUT_OF_BOUNDS_EXCEPTION 13
 
 using namespace std;
 
@@ -44,11 +44,18 @@ class List {
 			if (list->isEmpty() || n == 0) {
 				return result->reverse();
 			}
-
 			return take(n - 1, list->tail(), result->insert(list->head()));  
 	       }
 
 	public:
+
+	       static int apply(int n, List* list) {
+			if (n < 0 || n >= length(list))
+				throw INDEX_OUT_OF_BOUNDS_EXCEPTION; 
+
+			List* result = take(n + 1, list);
+			return result->head();
+	       }
 		
 		static List* take(int n, List* list) {
 			return take(n, list, new List());
@@ -146,6 +153,9 @@ class List {
 			List::take(n, this);
 		}
 
+		int apply(int n) {
+			List::apply(n, this);
+		}
 
 };
 
@@ -173,8 +183,11 @@ int main() {
 	List* reversed = list->reverse();
 	cout << "last at reversed list: " << reversed->last() << endl;
 
+	int result = list->apply(0); 
+	cout << "value at index 0: " << result << endl;  
+	
 	List* taken = list->take(2);
 	cout << "taken list size: " << taken->size() << endl;
-	
+
 	return 0;
 }
