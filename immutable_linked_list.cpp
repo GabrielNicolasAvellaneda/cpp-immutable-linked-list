@@ -40,7 +40,20 @@ class List {
 		       reverse(list->tail(), reversed->insert(list->head()));  
 	       }
 
+	       static List* take(int n, List* list, List* result) {
+			if (list->isEmpty() || n == 0) {
+				return result->reverse();
+			}
+
+			return take(n - 1, list->tail(), result->insert(list->head()));  
+	       }
+
 	public:
+		
+		static List* take(int n, List* list) {
+			return take(n, list, new List());
+		}
+
 		static List* reverse(List *list) {
 			List::reverse(list, new List());
 		}
@@ -129,6 +142,10 @@ class List {
 			List::reverse(this);
 		}
 
+		List* take(int n) {
+			List::take(n, this);
+		}
+
 
 };
 
@@ -155,6 +172,9 @@ int main() {
 
 	List* reversed = list->reverse();
 	cout << "last at reversed list: " << reversed->last() << endl;
+
+	List* taken = list->take(2);
+	cout << "taken list size: " << taken->size() << endl;
 	
 	return 0;
 }
