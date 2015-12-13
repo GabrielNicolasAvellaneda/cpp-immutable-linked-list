@@ -20,9 +20,8 @@ class List {
 	public:
 		static List* create(vector<int> values) {
 			List* list = new List();
-			for (int i = values.size()-1; i >= 0; i--) {
-				int value = values[i];
-				list->insert(value);
+			for (auto it = values.rbegin(); it != values.rend(); it++) {
+				list->insert(*it);
 			}
 			return list;
 		}
