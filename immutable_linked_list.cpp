@@ -32,7 +32,19 @@ class List {
 			return size(list->tail(), n + 1);
 		}
 
+	       static List* reverse(List* list, List* reversed) {
+		       if (list->isEmpty()) {
+				return reversed;
+		       }
+
+		       reverse(list->tail(), reversed->insert(list->head()));  
+	       }
+
 	public:
+		static List* reverse(List *list) {
+			List::reverse(list, new List());
+		}
+
 		static int length(List *list) {
 			return size(list);
 		}
@@ -113,6 +125,10 @@ class List {
 			List::length(this);
 		}
 
+		List* reverse() {
+			List::reverse(this);
+		}
+
 
 };
 
@@ -136,6 +152,9 @@ int main() {
 
 	cout << "last: " << list->last() << endl;
 	cout << "size: " << list->size() << endl;
+
+	List* reversed = list->reverse();
+	cout << "last at reversed list: " << reversed->last() << endl;
 	
 	return 0;
 }
