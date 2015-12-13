@@ -24,7 +24,23 @@ class List {
 			_head = head;
 		}
 
+	private:
+	       static int size(List *list, int n) {
+			if (list->isEmpty()) {
+				return n;
+			}
+			return size(list->tail(), n + 1);
+		}
+
 	public:
+		static int length(List *list) {
+			return size(list);
+		}
+
+		static int size(List* list) {
+			return List::size(list, 0);
+		}
+
 		static int last(List* list) {
 			if (list->isEmpty()) {
 				throw NO_SUCH_ELEMENT_EXCEPTION;
@@ -89,6 +105,14 @@ class List {
 			List::last(this);
 		}
 
+		int size() {
+			List::size(this);
+		}
+
+		int length() {
+			List::length(this);
+		}
+
 
 };
 
@@ -111,6 +135,7 @@ int main() {
 	printList(list);
 
 	cout << "last: " << list->last() << endl;
+	cout << "size: " << list->size() << endl;
 	
 	return 0;
 }
