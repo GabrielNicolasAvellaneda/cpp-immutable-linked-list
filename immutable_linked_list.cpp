@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cstddef>
+
+#define NO_SUCH_ELEMENT_EXCEPTION 10;
+
 using namespace std;
 
 class List {
@@ -7,13 +10,9 @@ class List {
 		int value;
 		Node* _next = NULL;
 
-		Node next() {
-			return (*_next);
-		}
-
-		Node next(Node* node) {
+		Node* next(Node* node) {
 			_next = node;
-			return next();
+			return _next;
 		}	
 	};
 
@@ -27,14 +26,14 @@ class List {
 			return list;
 		}
 
-		void insert(int value) {
-			Node node;
-			node.value = value;
+		List* insert(int value) {
+			Node *node = new Node;
+			node->value = value;
 			if (_head != NULL) {
-				node.next(_head);
+				node->_next = _head;
 			}	
 
-			_head = &node;
+			_head = node;
 		}
 
 		Node* _head;
@@ -44,9 +43,19 @@ class List {
 		}
 
 		int head() {
+			if (_head == NULL) {
+				throw NO_SUCH_ELEMENT_EXCEPTION;
+			}
+
 			return _head->value;
 		}
 
+		List* tail() {
+			List* list = new List();
+			Node* tailHead = this->_head->_next;
+			list->_head = tailHead;
+			return list;
+		}
 
 };
 
@@ -55,7 +64,15 @@ int main() {
 	int numbers[] = {1, 2, 3, 4, 5};
 	List *list = List::create(numbers, 5);
 	int head = list->head();
+	List *tail = list->tail();
 	cout << "Head value: " << head << endl;
-
+	
+	try {
+		int tailHead = tail->head();
+		cout << "Tail head: " << tailHead << endl;
+	}
+	catch (int e) {
+		cout << "Exception thrown: "  << e << endl;
+	}
 	return 0;
 }
