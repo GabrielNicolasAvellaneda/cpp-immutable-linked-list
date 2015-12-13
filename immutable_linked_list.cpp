@@ -61,6 +61,13 @@ class List {
 
 	public:
 
+	       static List* init(List* list) {
+		       if (list->isEmpty())
+			       throw UNSUPPORTED_OPERATION_EXCEPTION;
+
+			return take(list->size()-1, list);
+	       }
+
 	       static int indexOf(int n, List* list) {
 			return indexOf(n, list, 0);	
 	       }
@@ -177,6 +184,10 @@ class List {
 			List::indexOf(n, this);
 		}
 
+		List* init() {
+			return List::init(this);
+		}
+
 };
 
 void printList(List* list) {
@@ -210,6 +221,9 @@ int main() {
 
 	int index = list->indexOf(6);
 	cout << "index: " << index << endl;
+
+	List* init = list->init();
+	cout << "init list size: " << init->size() << endl;
 
 	return 0;
 }
