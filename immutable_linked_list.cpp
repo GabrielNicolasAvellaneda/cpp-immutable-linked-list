@@ -2,7 +2,9 @@
 #include <cstddef>
 #include <vector>
 
-#define NO_SUCH_ELEMENT_EXCEPTION 10;
+#define NO_SUCH_ELEMENT_EXCEPTION 10
+
+#define UNSUPPORTED_OPERATION_EXCEPTION 12
 
 using namespace std;
 
@@ -17,11 +19,30 @@ class List {
 		}	
 	};
 
+	protected:
+		List(Node* head) {
+			_head = head;
+		}
+
 	public:
+		static int last(List* list) {
+			if (list->isEmpty()) {
+				throw NO_SUCH_ELEMENT_EXCEPTION;
+			}
+			
+			auto head = list->head();
+			auto tail = list->tail();
+			if (tail->isEmpty()) {
+				return  head;
+			}
+
+			return last(tail);
+		}
+
 		static List* create(vector<int> values) {
 			List* list = new List();
 			for (auto it = values.rbegin(); it != values.rend(); it++) {
-				list->insert(*it);
+				list = list->insert(*it);
 			}
 			return list;
 		}
@@ -51,9 +72,12 @@ class List {
 		}
 
 		List* tail() {
-			List* list = new List();
+			if (isEmpty()) {
+				throw UNSUPPORTED_OPERATION_EXCEPTION;
+			}
+
 			Node* tailHead = this->_head->_next;
-			list->_head = tailHead;
+			List* list = new List(tailHead);
 			return list;
 		}
 
@@ -61,7 +85,21 @@ class List {
 			return _head == NULL;
 		}
 
+		int last() {
+			List::last(this);
+		}
+
+
 };
+
+void printList(List* list) {
+	if (list->isEmpty())
+		return;
+
+	int head = list->head();
+	cout << head << endl;
+	printList(list->tail());
+}
 
 int main() {
 
@@ -69,14 +107,10 @@ int main() {
 	List *list = List::create(numbers);
 	int head = list->head();
 	List *tail = list->tail();
-	cout << "Head value: " << head << endl;
+
+	printList(list);
+
+	cout << "last: " << list->last() << endl;
 	
-	try {
-		int tailHead = tail->head();
-		cout << "Tail head: " << tailHead << endl;
-	}
-	catch (int e) {
-		cout << "Exception thrown: "  << e << endl;
-	}
 	return 0;
 }
