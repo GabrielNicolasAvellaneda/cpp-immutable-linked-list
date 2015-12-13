@@ -19,31 +19,35 @@ class List {
 
 	public:
 		static List* create(int values[], int n) {
-			Node *head = NULL;
-			for (int i = n-1; i >= 0; i--) {
-				Node node;
-				node.value = values[i];
-				if (head != NULL) {
-					node.next(head);
-					head = &node;
-				} else {
-					head = &node;
-				}
-			}
 			List* list = new List();
-			(*list).head(head);
+			for (int i = n-1; i >= 0; i--) {
+				int value = values[i];
+				list->insert(value);
+			}
 			return list;
+		}
+
+		void insert(int value) {
+			Node node;
+			node.value = value;
+			if (_head != NULL) {
+				node.next(_head);
+			}	
+
+			_head = &node;
 		}
 
 		Node* _head;
 
-		void head(Node* head) {
-			this->_head = head;
+		List() {
+			_head = NULL;
 		}
 
 		int head() {
-			return this->_head->value;
+			return _head->value;
 		}
+
+
 };
 
 int main() {
