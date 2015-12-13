@@ -59,6 +59,25 @@ class List {
 		       return indexOf(n, list->tail(), index + 1);
 	       }
 
+	       Node* headNode() {
+			return _head;
+	       }
+
+	       static Node* _lastNode(List* list) {
+			if (list->isEmpty())
+				throw NO_SUCH_ELEMENT_EXCEPTION;
+
+			auto tail = list->tail();
+			if (tail->isEmpty())
+				return list->headNode();
+
+			return _lastNode(tail);
+	       }
+
+		Node* _lastNode() {
+			return List::_lastNode(this);	
+		}
+
 	public:
 
 	       static List* init(List* list) {
@@ -97,17 +116,8 @@ class List {
 		}
 
 		static int last(List* list) {
-			if (list->isEmpty()) {
-				throw NO_SUCH_ELEMENT_EXCEPTION;
-			}
-			
-			auto head = list->head();
-			auto tail = list->tail();
-			if (tail->isEmpty()) {
-				return  head;
-			}
-
-			return last(tail);
+			Node* lastNode = _lastNode(list);
+			return lastNode->value;
 		}
 
 		static List* create(vector<int> values) {
@@ -126,6 +136,19 @@ class List {
 			}	
 
 			_head = node;
+			return this;
+		}
+
+		List* append(int value) {
+			Node *node = new Node;
+			node->value = value;
+			if (isEmpty()) {
+				_head = node;	
+			} else {
+				Node* lastNode = _lastNode();
+				lastNode->_next = node; 
+			}
+			return this; 
 		}
 
 		Node* _head;
@@ -224,6 +247,9 @@ int main() {
 
 	List* init = list->init();
 	cout << "init list size: " << init->size() << endl;
+
+	List* appendedList = list->append(6);  
+	printList(appendedList);
 
 	return 0;
 }
